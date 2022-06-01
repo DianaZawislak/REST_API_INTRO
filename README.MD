@@ -1,8 +1,8 @@
 # REST API Introduction
 
-### Name: <Insert Here>
+### Name: Diana Zawislak
 
-### UCID: <Insert Here>
+### UCID: DZ29
 
 ## Introduction
 
