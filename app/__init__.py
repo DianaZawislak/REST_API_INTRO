@@ -38,12 +38,35 @@ def hotels_api_request():
     info_logger = logging.getLogger("hotels_api_response")
     info_logger.info(data.decode("utf-8"))
 
+def world_cities_api_request():
+    """This makes a request to world cities on rapid api and saves the request to the hotels_api_response logger"""
+    # This creates and HTTP connection to make a request
+
+    conn = http.client.HTTPSConnection('andruxnet-world-cities-v1.p.rapidapi.com')
+
+    # this sets up an HTTP Request
+    headers = {
+        'X-RapidAPI-Host': 'andruxnet-world-cities-v1.p.rapidapi.com',
+        'X-RapidAPI-Key': os.getenv('WORLD_CITIES_API_KEY')  # gets the rapid API key from the .env file
+    }
+
+    # this makes the actual request.
+    conn.request("GET", '/locations/v2/search?query=new%20york&locale=en_US&currency=USD', headers=headers)
+    # this gets the response data
+
+    res = conn.getresponse()
+    # this reads the response data and stores it in a data variable
+    data = res.read()
+    # this gets the logger to use to store the output
+    info_logger = logging.getLogger("world_cities_api_response")
+    info_logger.info(data.decode("utf-8"))
 
 def main():
     """This is the main function that is run"""
     # this loads the info from the .env file
     #this is my hotels api request that stores the response in the hotels_api_reponse_logger
     hotels_api_request()
+    world_cities_api_request()
 
 
 LOGGING_CONFIG = {
@@ -80,6 +103,14 @@ LOGGING_CONFIG = {
             'maxBytes': 10000000,
             'backupCount': 5,
         },
+        'file.handler.world_cities_response': {
+            'class': 'logging.handlers.RotatingFileHandler',
+            'formatter': 'just_message',
+            'filename': os.path.join(Config.LOG_DIR, 'world_cities_response.log'),
+            'encoding': 'utf-8',
+            'maxBytes': 10000000,
+            'backupCount': 5,
+        },
         'file.handler.default_file': {
             'class': 'logging.handlers.RotatingFileHandler',
             'formatter': 'standard',
@@ -101,6 +132,12 @@ LOGGING_CONFIG = {
             'propagate': False
         },
         'hotels_api_response': {
+            'handlers': ['file.handler.hotels_api_response'],
+            'level': 'INFO',
+            'propagate': False
+        },
+
+        'world_cities_response': {
             'handlers': ['file.handler.hotels_api_response'],
             'level': 'INFO',
             'propagate': False
