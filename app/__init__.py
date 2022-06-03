@@ -51,7 +51,7 @@ def world_cities_api_request():
     }
 
     # this makes the actual request.
-    conn.request("GET", '/locations/v2/search?query=new%20york&locale=en_US&currency=USD', headers=headers)
+    conn.request("GET", "/?query=paris&searchby=city", headers=headers)
     # this gets the response data
 
     res = conn.getresponse()
@@ -103,10 +103,10 @@ LOGGING_CONFIG = {
             'maxBytes': 10000000,
             'backupCount': 5,
         },
-        'file.handler.world_cities_response': {
+        'file.handler.world_cities_api_response': {
             'class': 'logging.handlers.RotatingFileHandler',
             'formatter': 'just_message',
-            'filename': os.path.join(Config.LOG_DIR, 'world_cities_response.log'),
+            'filename': os.path.join(Config.LOG_DIR, 'world_cities_api_response.log'),
             'encoding': 'utf-8',
             'maxBytes': 10000000,
             'backupCount': 5,
@@ -137,8 +137,8 @@ LOGGING_CONFIG = {
             'propagate': False
         },
 
-        'world_cities_response': {
-            'handlers': ['file.handler.hotels_api_response'],
+        'world_cities_api_response': {
+            'handlers': ['file.handler.world_cities_api_response'],
             'level': 'INFO',
             'propagate': False
         },
